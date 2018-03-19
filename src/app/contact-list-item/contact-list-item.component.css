@@ -1,0 +1,40 @@
+li {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+}
+
+h2 {
+    font-size: 3ch;
+    margin: 0 0 5px 0;
+    color: #333;
+}
+
+li i {
+    margin-right: 15px;
+}
+
+li p {
+    margin: 0;
+    color: #777;
+}
+
+li p:last-child{
+    margin-right: 5em;
+}
+
+.col1 {
+    width: 100%;
+}
+
+.details {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+}
