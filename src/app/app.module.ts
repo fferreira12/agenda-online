@@ -8,6 +8,7 @@ import { ContactListItemComponent } from './contact-list-item/contact-list-item.
 import { ContactListComponent } from './contact-list/contact-list.component';
 import { ContactMockup } from './contact.mockup.service';
 import { QueryService } from './query.service';
+import { AddContactComponent } from './add-contact/add-contact.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { QueryService } from './query.service';
     AppComponent,
     SearchBarComponent,
     ContactListItemComponent,
-    ContactListComponent
+    ContactListComponent,
+    AddContactComponent
   ],
   imports: [
     BrowserModule,

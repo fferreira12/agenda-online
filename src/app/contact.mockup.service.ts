@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Contact } from './contact';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
@@ -8,12 +8,14 @@ import { CONTACTS } from './mock-contacts';
 @Injectable()
 export class ContactMockup {
 
-    //private contacts: Contact[];
+    private contacts: Contact[];
 
-    constructor() { }
+    constructor() {
+        this.init();
+    }
 
-    ngOnInit() {
-
+    init() {
+        this.contacts = CONTACTS;
     }
 
     getContacts(): Observable<Contact[]> {
@@ -23,7 +25,7 @@ export class ContactMockup {
     searchContacts(term: String): Observable<Contact[]> {
         let observable = Observable.create((observer) => {
             let matches: Contact[] = [];
-            for (let contact of CONTACTS) {
+            for (let contact of this.contacts) {
                 if (contact.search(term)) {
                     matches.push(contact);
                 }
@@ -33,6 +35,10 @@ export class ContactMockup {
         });
 
         return observable;
+    }
+
+    addContact(contact: Contact) {
+        this.contacts.push(contact);
     }
 
 }

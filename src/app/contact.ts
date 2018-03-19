@@ -19,13 +19,13 @@ export class Contact {
     public search (query: String, obj:any = this): boolean {
 
         for (var key in obj) {
-            var value = this[key];
+            var value = obj[key];
     
-            if (typeof value === 'object') {
-                this.search(query, value);
+            if (typeof value === 'object' || value instanceof Array) {
+                return this.search(query, value);
             }
     
-            if (value && value.toString && value.toString().indexOf(query) >= 0) {
+            if (value && value.toString && value.toString().toLowerCase().indexOf(query.toLowerCase()) >= 0) {
                 return true;
             }
     

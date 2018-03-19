@@ -11,6 +11,7 @@ import { Subject } from 'rxjs/Subject';
 export class SearchBarComponent implements OnInit {
 
   private query: String = '';
+  private onAddMode: boolean = false;
 
   constructor(private queryService: QueryService) { }
 
@@ -20,6 +21,10 @@ export class SearchBarComponent implements OnInit {
 
   filter(term: String) {
     this.queryService.search(term);
+  }
+
+  onClickAddContact() {
+    this.onAddMode = !this.onAddMode;
   }
 
 }
