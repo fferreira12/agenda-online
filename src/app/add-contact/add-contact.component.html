@@ -3,37 +3,53 @@
 </div>
 <div class="row" *ngIf="onAddMode">
   <div class="col s12">Novo Contato</div>
-  <form class="col s12">
+  <form class="col s12" #f="ngForm">
     <div class="row">
       <div class="input-field col s6">
-        <input id="nome" type="text" class="validate">
+        <input id="nome" type="text" class="validate" ngModel name="nome">
         <label for="nome">Nome</label>
       </div>
       <div class="input-field col s6">
-        <input id="nome_fonetico" type="text" class="validate">
+        <input id="nome_fonetico" type="text" class="validate" ngModel name="nome_fonetico">
         <label for="nome">Nome Fonético</label>
       </div>
       <div class="input-field col s6">
-        <input id="sobrenome" type="text" class="validate">
+        <input id="sobrenome" type="text" class="validate" class="validate" ngModel name="sobrenome">
         <label for="sobrenome">Sobrenome</label>
       </div>
       <div class="input-field col s6">
-        <input id="sobrenome_fonetico" type="text" class="validate">
+        <input id="sobrenome_fonetico" type="text" class="validate" class="validate" ngModel name="sobrenome_fonetico">
         <label for="sobrenome_fonetico">Sobrenome Fonético</label>
       </div>
       <div class="row">
         <div class="input-field col s6">
-          <input id="empresa" type="text" class="validate">
+          <input id="empresa" type="text" class="validate" class="validate" ngModel name="empresa">
           <label for="empresa">Empresa</label>
         </div>
         <div class="input-field col s6">
-          <input id="empresa_fonetico" type="text" class="validate">
+          <input id="empresa_fonetico" type="text" class="validate" class="validate" ngModel name="empresa_fonetico">
           <label for="empresa_fonetico">Empresa (Fonético)</label>
         </div>
+        <div class="col s11">Telefones</div>
+
+        <div class="telefone-add col s1">
+            <i class="small material-icons input-field col s1 teal-text lighten-2" (click)="onAddItem('telefone')">add_circle_outline</i>
+        </div>
+
+        <div class="telefone-item" *ngFor="let t of ' '.repeat(dataItems['telefone']).split(''); let i = index">
+          <div class="input-field col s5">
+            <input class="telefone_tipo" type="text" class="validate" placeholder="Tipo (Casa, Celular, etc)" ngModel name="tipo{{i}}">
+          </div>
+          <div class="input-field col s6">
+            <input class="telefone_numero" type="text" class="validate" placeholder="Número" ngModel name="numero{{i}}">
+          </div>
+          <i class="small material-icons input-field col s1 red-text lighten-1" (click)="onRemoveItem('telefone')">remove_circle_outline</i>
+        </div>
+
         <a class="waves-effect green accent-4 btn s2" (click)="onSave()">Salvar</a>
         <a class="waves-effect deep-orange accent-4 btn s2" (click)="onDiscard()">Descartar</a>
       </div>
     </div>
-    
+
   </form>
 </div>
