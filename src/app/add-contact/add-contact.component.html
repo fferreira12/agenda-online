@@ -3,48 +3,124 @@
 </div>
 <div class="row" *ngIf="onAddMode">
   <div class="col s12">Novo Contato</div>
-  <form class="col s12" #f="ngForm">
+  <form class="col s12" [formGroup]="contactForm">
     <div class="row">
       <div class="input-field col s6">
-        <input id="nome" type="text" class="validate" ngModel name="nome">
+        <input id="nome" type="text" class="validate" name="nome" formControlName="nome">
         <label for="nome">Nome</label>
       </div>
       <div class="input-field col s6">
-        <input id="nome_fonetico" type="text" class="validate" ngModel name="nome_fonetico">
+        <input id="nome_fonetico" type="text" class="validate" name="nome_fonetico" formControlName="nome_fonetico">
         <label for="nome">Nome Fonético</label>
       </div>
       <div class="input-field col s6">
-        <input id="sobrenome" type="text" class="validate" class="validate" ngModel name="sobrenome">
+        <input id="sobrenome" type="text" class="validate" name="sobrenome" formControlName="sobrenome">
         <label for="sobrenome">Sobrenome</label>
       </div>
       <div class="input-field col s6">
-        <input id="sobrenome_fonetico" type="text" class="validate" class="validate" ngModel name="sobrenome_fonetico">
+        <input id="sobrenome_fonetico" type="text" class="validate" class="validate" name="sobrenome_fonetico" formControlName="sobrenome_fonetico">
         <label for="sobrenome_fonetico">Sobrenome Fonético</label>
       </div>
       <div class="row">
         <div class="input-field col s6">
-          <input id="empresa" type="text" class="validate" class="validate" ngModel name="empresa">
+          <input id="empresa" type="text" class="validate" class="validate" name="empresa" formControlName="empresa">
           <label for="empresa">Empresa</label>
         </div>
         <div class="input-field col s6">
-          <input id="empresa_fonetico" type="text" class="validate" class="validate" ngModel name="empresa_fonetico">
+          <input id="empresa_fonetico" type="text" class="validate" class="validate" name="empresa_fonetico" formControlName="empresa_fonetico">
           <label for="empresa_fonetico">Empresa (Fonético)</label>
         </div>
+
+
+
         <div class="col s11">Telefones</div>
-
-        <div class="telefone-add col s1">
-            <i class="small material-icons input-field col s1 teal-text lighten-2" (click)="onAddItem('telefone')">add_circle_outline</i>
+        <div class="col s1">
+          <i class="small material-icons input-field col s1 teal-text lighten-2" (click)="addItem('telefone')">add_circle_outline</i>
         </div>
 
-        <div class="telefone-item" *ngFor="let t of ' '.repeat(dataItems['telefone']).split(''); let i = index">
-          <div class="input-field col s5">
-            <input class="telefone_tipo" type="text" class="validate" placeholder="Tipo (Casa, Celular, etc)" ngModel name="tipo{{i}}">
+        <div class="telefone-item" formArrayName="telefones">
+          <div *ngFor="let telefone of getItem('telefone').controls; let i=index" [formGroupName]="i">
+            <div class="input-field col s5">
+              <input class="telefone_tipo" type="text" class="validate" placeholder="Tipo (Casa, Celular, etc)" formControlName="tipo">
+            </div>
+            <div class="input-field col s6">
+              <input class="telefone_numero" type="text" class="validate" placeholder="Número" formControlName="numero">
+            </div>
+            <i class="small material-icons input-field col s1 red-text lighten-1" (click)="removeTelefone(i)">remove_circle_outline</i>
           </div>
-          <div class="input-field col s6">
-            <input class="telefone_numero" type="text" class="validate" placeholder="Número" ngModel name="numero{{i}}">
-          </div>
-          <i class="small material-icons input-field col s1 red-text lighten-1" (click)="onRemoveItem('telefone')">remove_circle_outline</i>
         </div>
+
+
+
+        <div class="col s11">Emails</div>
+        <div class="col s1">
+          <i class="small material-icons input-field col s1 teal-text lighten-2" (click)="addItem('email')">add_circle_outline</i>
+        </div>
+
+        <div class="email-item" formArrayName="emails">
+          <div *ngFor="let email of getItem('email').controls; let i=index" [formGroupName]="i">
+            <div class="input-field col s5">
+              <input class="email_tipo" type="text" class="validate" placeholder="Tipo (Trabalho, Pessoal, etc)" formControlName="tipo">
+            </div>
+            <div class="input-field col s6">
+              <input class="email" type="text" class="validate" placeholder="Email" formControlName="email">
+            </div>
+            <i class="small material-icons input-field col s1 red-text lighten-1" (click)="removeItem('email',i)">remove_circle_outline</i>
+          </div>
+        </div>
+
+        <div class="col s11">URLs</div>
+        <div class="col s1">
+          <i class="small material-icons input-field col s1 teal-text lighten-2" (click)="addItem('url')">add_circle_outline</i>
+        </div>
+
+        <div class="url-item" formArrayName="urls">
+          <div *ngFor="let url of getItem('url').controls; let i=index" [formGroupName]="i">
+            <div class="input-field col s5">
+              <input class="url_tipo" type="text" class="validate" placeholder="Tipo (Site Pessoal, Blog, etc)" formControlName="tipo">
+            </div>
+            <div class="input-field col s6">
+              <input class="url" type="text" class="validate" placeholder="URL" formControlName="url">
+            </div>
+            <i class="small material-icons input-field col s1 red-text lighten-1" (click)="removeItem('url',i)">remove_circle_outline</i>
+          </div>
+        </div>
+
+        <div class="col s11">Endereços</div>
+        <div class="col s1">
+          <i class="small material-icons input-field col s1 teal-text lighten-2" (click)="addItem('endereco')">add_circle_outline</i>
+        </div>
+
+        <div class="endereco-item" formArrayName="enderecos">
+          <div *ngFor="let endereco of getItem('endereco').controls; let i=index" [formGroupName]="i">
+            <div class="input-field col s5">
+              <input class="endereco_tipo" type="text" class="validate" placeholder="Tipo (Casa, Trabalho, etc)" formControlName="tipo">
+            </div>
+            <div class="input-field col s6">
+              <input class="endereco" type="text" class="validate" placeholder="Endereço" formControlName="endereco">
+            </div>
+            <i class="small material-icons input-field col s1 red-text lighten-1" (click)="removeItem('endereco',i)">remove_circle_outline</i>
+          </div>
+        </div>
+
+
+        <div class="col s11">Redes Sociais</div>
+        <div class="col s1">
+          <i class="small material-icons input-field col s1 teal-text lighten-2" (click)="addItem('rede_social')">add_circle_outline</i>
+        </div>
+
+        <div class="rede-social-item" formArrayName="redes_sociais">
+          <div *ngFor="let rede_social of getItem('rede_social').controls; let i=index" [formGroupName]="i">
+            <div class="input-field col s5">
+              <input class="rede_social_tipo" type="text" class="validate" placeholder="Rede Social (Facebook, Twitter, etc)" formControlName="rede">
+            </div>
+            <div class="input-field col s6">
+              <input class="endereco" type="text" class="validate" placeholder="Endereço" formControlName="url">
+            </div>
+            <i class="small material-icons input-field col s1 red-text lighten-1" (click)="removeItem('rede_social',i)">remove_circle_outline</i>
+          </div>
+        </div>
+
 
         <a class="waves-effect green accent-4 btn s2" (click)="onSave()">Salvar</a>
         <a class="waves-effect deep-orange accent-4 btn s2" (click)="onDiscard()">Descartar</a>
