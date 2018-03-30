@@ -3,27 +3,62 @@ import { Contact } from './contact';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { CONTACTS } from './mock-contacts';
+import { Subject } from 'rxjs/Subject';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 //import * as Rx from 'rxjs';
 
 @Injectable()
 export class ContactMockup {
 
+    //array of contacts
     private contacts: Contact[];
+
+    //subject of contacts, con multicast to many observers
+    //is an observable and an observer at the same time
+    //private subject: Subject<Contact[]>;
+
+    //observable of contacts
+    private contacts$: Observable<Contact[]>;
+
+    //subject of the query string
+    private queryString = new Subject<String>();
 
     constructor() {
         this.init();
     }
 
     init() {
+        //gets mockup data
         this.contacts = CONTACTS;
+
+        //initializes subject of contacts
+        //this.subject = new Subject();
+
+        //configures observable of contacts
+        // this.contacts$ = (this.queryString.pipe(
+        //     // wait 300ms after each keystroke before considering the term
+        //     debounceTime(300),
+
+        //     // ignore new term if same as previous term
+        //     distinctUntilChanged(),
+
+        //     // switch to new search observable each time the term changes
+        //     switchMap((term: string) => this.searchContacts(term)),
+        // ));
+
+        // console.log("contact service initialized");
+
     }
 
-    getContacts(): Observable<Contact[]> {
-        return of(CONTACTS);
-    }
+    //called on every keystroke
+    // search(term: String): void {
+    //     // console.log('term: ' + term);
+    //     // this.queryString.next(term);
+    // }
 
+    //actually searches contacts based on a search string
     searchContacts(term: String): Observable<Contact[]> {
-        let observable = Observable.create((observer) => {
+        this.contacts$ = Observable.create((observer) => {
             let matches: Contact[] = [];
             for (let contact of this.contacts) {
                 if (contact.search(term)) {
@@ -31,14 +66,26 @@ export class ContactMockup {
                 }
             }
             observer.next(matches);
-            observer.complete();
+            // observer.complete();
         });
-
-        return observable;
+        return this.contacts$;
     }
 
+    //adds new contact to the contact property
     addContact(contact: Contact) {
         this.contacts.push(contact);
+        this.refreshContacts();
     }
 
+    //call next on the contact subject
+    //purpose: update all observers of contacts
+    refreshContacts() {
+        //this.subject.next(this.contacts);
+    }
+
+    //returns the observable of contacts
+    getContacts$(): Observable<Contact[]> {
+        // return of(this.contacts);
+        return (this.contacts$);
+    }
 }

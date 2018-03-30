@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ContactMockup } from '../contact.mockup.service';
 import { Contact } from '../contact';
+import { AsyncPipe } from '@angular/common';
 
-import { QueryService } from '../query.service';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -12,15 +12,30 @@ import { Observable } from 'rxjs/Observable';
 })
 export class ContactListComponent implements OnInit {
 
+  private contacts$: Observable<Contact[]>;
   private contacts: Contact[];
 
-  constructor(private queryService: QueryService) { }
-
+  constructor(private contactService: ContactMockup) {
+    // this.contactService.init();
+    // this.contactService.getContacts$().subscribe(this);
+    
+  }
+  
   ngOnInit() {
-    this.queryService.getContacts$().subscribe(contacts => {
-      this.contacts = contacts;
-    });
-    this.queryService.search('');
+    // console.log(this.queryService.getContacts$());
+    
+    //this.contacts$ = this.queryService.getContacts$();
+    
+    // console.log(this.contacts$);
+    
+    console.log("ngOnInit on contact list component");
+    
+    this.contactService.getContacts$().subscribe(this);
+
+    // this.contactService.search('');
   }
 
+  next(contacts: Contact[]): void {
+    this.contacts = contacts;
+  }
 }

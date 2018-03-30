@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { QueryService } from '../query.service';
+import { ContactMockup } from '../contact.mockup.service';
 import { Subject } from 'rxjs/Subject';
 
 
@@ -13,18 +13,14 @@ export class SearchBarComponent implements OnInit {
   private query: String = '';
   private onAddMode: boolean = false;
 
-  constructor(private queryService: QueryService) { }
+  constructor(private contactService: ContactMockup) { }
 
   ngOnInit() {
     this.filter(this.query);
   }
 
   filter(term: String) {
-    this.queryService.search(term);
-  }
-
-  onClickAddContact() {
-    this.onAddMode = !this.onAddMode;
+    this.contactService.searchContacts(term);
   }
 
 }

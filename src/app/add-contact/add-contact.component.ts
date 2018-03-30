@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Contact } from '../contact';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ContactMockup } from '../contact.mockup.service';
 
 @Component({
   selector: 'app-add-contact',
@@ -12,7 +13,9 @@ export class AddContactComponent implements OnInit {
   private onAddMode: boolean = false;
   private contactForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private cs: ContactMockup) {
     this.createForm();
   }
 
@@ -96,6 +99,14 @@ export class AddContactComponent implements OnInit {
 
 
   onSave() {
-
+    const saveContact = this.prepareSaveContact();
+    console.log(saveContact);
+    this.cs.addContact(saveContact);
   }
+
+  prepareSaveContact(): Contact {
+    const formModel = this.contactForm.value;
+    return new Contact(formModel);
+  }
+
 }
