@@ -102,6 +102,7 @@ export class AddContactComponent implements OnInit {
     const saveContact = this.prepareSaveContact();
     console.log(saveContact);
     this.cs.addContact(saveContact);
+    this.onClickAddContact();
   }
 
   prepareSaveContact(): Contact {

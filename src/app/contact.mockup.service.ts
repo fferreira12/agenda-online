@@ -95,14 +95,14 @@ export class ContactMockup {
     //adds new contact to the contact property
     addContact(contact: Contact) {
         this.contacts.push(contact);
-        this.refreshContacts();
+        this.behaviorSubject.next(this.contacts);
     }
 
     //call next on the contact subject
     //purpose: update all observers of contacts
-    refreshContacts() {
-        //this.subject.next(this.contacts);
-    }
+    // refreshContacts() {
+    //     this.behaviorSubject.n
+    // }
 
     //returns the observable of contacts
     getContacts$(): BehaviorSubject<Contact[]> {
