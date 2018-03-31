@@ -5,7 +5,8 @@ import { of } from 'rxjs/observable/of';
 import { CONTACTS } from './mock-contacts';
 import { Subject } from 'rxjs/Subject';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-//import * as Rx from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+// import * as Rx from 'rxjs';
 
 @Injectable()
 export class ContactMockup {
@@ -19,6 +20,7 @@ export class ContactMockup {
 
     //observable of contacts
     private contacts$: Observable<Contact[]>;
+    private behaviorSubject: BehaviorSubject<Contact[]>;
 
     //subject of the query string
     private queryString = new Subject<String>();
@@ -35,7 +37,7 @@ export class ContactMockup {
         //this.subject = new Subject();
 
         //configures observable of contacts
-        // this.contacts$ = (this.queryString.pipe(
+        // this.contacts$ = this.queryString.pipe(
         //     // wait 300ms after each keystroke before considering the term
         //     debounceTime(300),
 
@@ -44,31 +46,50 @@ export class ContactMockup {
 
         //     // switch to new search observable each time the term changes
         //     switchMap((term: string) => this.searchContacts(term)),
-        // ));
+        // );
 
         // console.log("contact service initialized");
+
+        this.behaviorSubject = new BehaviorSubject(this.contacts);
+
 
     }
 
     //called on every keystroke
-    // search(term: String): void {
-    //     // console.log('term: ' + term);
-    //     // this.queryString.next(term);
+    search(term: String): void {
+        this.queryString.next(term);
+    }
+
+    // //actually searches contacts based on a search string
+    // searchContacts2(term: String): Observable<Contact[]> {
+    //     this.contacts$ = Observable.create((observer) => {
+    //         let matches: Contact[] = [];
+    //         for (let contact of this.contacts) {
+    //             if (contact.search(term)) {
+    //                 matches.push(contact);
+    //             }
+    //         }
+    //         observer.next(matches);
+    //         observer.complete();
+    //     });
+    //     // .pipe(
+    //     //     distinctUntilChanged(),
+    //     //     debounceTime(1000)
+    //     // );
+    //     return this.contacts$;
     // }
 
-    //actually searches contacts based on a search string
-    searchContacts(term: String): Observable<Contact[]> {
-        this.contacts$ = Observable.create((observer) => {
-            let matches: Contact[] = [];
-            for (let contact of this.contacts) {
-                if (contact.search(term)) {
-                    matches.push(contact);
-                }
+    searchContacts(term: String): BehaviorSubject<Contact[]> {
+
+        let matches: Contact[] = [];
+        for (let contact of this.contacts) {
+            if (contact.search(term)) {
+                matches.push(contact);
             }
-            observer.next(matches);
-            // observer.complete();
-        });
-        return this.contacts$;
+        }
+        this.behaviorSubject.next(matches);
+
+        return this.behaviorSubject;
     }
 
     //adds new contact to the contact property
@@ -84,8 +105,8 @@ export class ContactMockup {
     }
 
     //returns the observable of contacts
-    getContacts$(): Observable<Contact[]> {
-        // return of(this.contacts);
-        return (this.contacts$);
+    getContacts$(): BehaviorSubject<Contact[]> {
+        // return (this.contacts$);
+        return this.behaviorSubject;
     }
 }
