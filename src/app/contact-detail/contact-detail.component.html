@@ -1,0 +1,65 @@
+<div class="container">
+  <div class="item">
+    Empresa: {{contact.empresa}} ({{contact.empresa_fonetico}})
+  </div>
+  <div class="item">
+    Data de Nascimento: {{contact.data_de_nascimento | date:'dd/MM/yyyy' }}
+  </div>
+
+  <div class="item">
+    <span>
+      Telefones: 
+    </span>
+    <ul>
+      <li *ngFor="let t of contact.telefones">
+        {{t.tipo}}: {{t.numero}}
+      </li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <span>
+      URLs: 
+    </span>
+    <ul>
+      <li *ngFor="let u of contact.urls">
+        {{u.tipo}}: {{u.url}}
+      </li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <span>
+      Endereços: 
+    </span>
+    <ul>
+      <li *ngFor="let e of contact.enderecos">
+        {{e.tipo}}: {{e.endereco}}
+      </li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <span>
+      Redes Sociais: 
+    </span>
+    <ul>
+      <li *ngFor="let r of contact.redes_sociais">
+        {{r.rede}}: {{r.url}}
+      </li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <span>
+      Emails: 
+    </span>
+    <ul>
+      <li *ngFor="let e of contact.emails">
+        {{e.tipo}}: {{e.email}}
+      </li>
+    </ul>
+  </div>
+
+</div>
+<a class="waves-effect waves-light red darken-1 btn" (click)="onDeleteContact()">Deletar</a>

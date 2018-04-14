@@ -1,8 +1,8 @@
-<li class="collection-item">
+<li class="collection-item" (click)="onShowDetails()">
   <i class="medium material-icons">account_circle</i>
   <div class="col1">
-    <h2>{{contact.nome}} {{contact.sobrenome}}</h2>
-    <div class="details">
+    <h2>{{contact.nome}} {{contact.sobrenome}} <span *ngIf="showDetails">({{contact.nome_fonetico}} {{contact.sobrenome_fonetico}})</span></h2>
+    <div class="details" *ngIf="!showDetails">
       <p>Telefone: {{contact.telefones[0].numero}}</p>
       <p>Email: {{contact.emails[0].email}}</p>
       <p>Empresa: {{contact.empresa}}</p>
@@ -10,3 +10,4 @@
     </div>
   </div>
 </li>
+<app-contact-detail [contact]="contact" *ngIf="showDetails"></app-contact-detail>

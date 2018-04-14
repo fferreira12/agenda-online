@@ -9,6 +9,7 @@ import { ContactListItemComponent } from './contact-list-item/contact-list-item.
 import { ContactListComponent } from './contact-list/contact-list.component';
 import { ContactMockup } from './contact.mockup.service';
 import { AddContactComponent } from './add-contact/add-contact.component';
+import { ContactDetailComponent } from './contact-detail/contact-detail.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { AddContactComponent } from './add-contact/add-contact.component';
     SearchBarComponent,
     ContactListItemComponent,
     ContactListComponent,
-    AddContactComponent
+    AddContactComponent,
+    ContactDetailComponent
   ],
   imports: [
     BrowserModule,
