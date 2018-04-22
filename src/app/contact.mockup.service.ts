@@ -33,23 +33,6 @@ export class ContactMockup {
         //gets mockup data
         this.contacts = CONTACTS;
 
-        //initializes subject of contacts
-        //this.subject = new Subject();
-
-        //configures observable of contacts
-        // this.contacts$ = this.queryString.pipe(
-        //     // wait 300ms after each keystroke before considering the term
-        //     debounceTime(300),
-
-        //     // ignore new term if same as previous term
-        //     distinctUntilChanged(),
-
-        //     // switch to new search observable each time the term changes
-        //     switchMap((term: string) => this.searchContacts(term)),
-        // );
-
-        // console.log("contact service initialized");
-
         this.behaviorSubject = new BehaviorSubject(this.contacts);
 
 
@@ -59,25 +42,6 @@ export class ContactMockup {
     search(term: String): void {
         this.queryString.next(term);
     }
-
-    // //actually searches contacts based on a search string
-    // searchContacts2(term: String): Observable<Contact[]> {
-    //     this.contacts$ = Observable.create((observer) => {
-    //         let matches: Contact[] = [];
-    //         for (let contact of this.contacts) {
-    //             if (contact.search(term)) {
-    //                 matches.push(contact);
-    //             }
-    //         }
-    //         observer.next(matches);
-    //         observer.complete();
-    //     });
-    //     // .pipe(
-    //     //     distinctUntilChanged(),
-    //     //     debounceTime(1000)
-    //     // );
-    //     return this.contacts$;
-    // }
 
     searchContacts(term: String): BehaviorSubject<Contact[]> {
 
@@ -98,15 +62,20 @@ export class ContactMockup {
         this.behaviorSubject.next(this.contacts);
     }
 
-    //call next on the contact subject
-    //purpose: update all observers of contacts
-    // refreshContacts() {
-    //     this.behaviorSubject.n
-    // }
-
     //returns the observable of contacts
     getContacts$(): BehaviorSubject<Contact[]> {
         // return (this.contacts$);
         return this.behaviorSubject;
     }
+
+    deleteContact(contact: Contact): boolean {
+        let index = this.contacts.indexOf(contact);
+        if (index > -1) {
+            this.contacts.splice(index, 1);
+            this.behaviorSubject.next(this.contacts);
+            return true;
+        }
+        return false;
+    }
+
 }

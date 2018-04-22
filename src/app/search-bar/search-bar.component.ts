@@ -13,7 +13,7 @@ import { Contact } from '../contact';
 })
 export class SearchBarComponent implements OnInit {
 
-  private query: String = '';
+  query: String = '';
   private onAddMode: boolean = false;
 
 

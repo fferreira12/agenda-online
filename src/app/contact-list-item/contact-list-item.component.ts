@@ -9,10 +9,15 @@ import { Contact } from '../contact';
 export class ContactListItemComponent implements OnInit {
 
   @Input() contact: Contact;
+  showDetails: boolean = false;
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  onShowDetails(){
+    this.showDetails = !this.showDetails;
   }
 
 }

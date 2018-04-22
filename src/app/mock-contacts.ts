@@ -5,7 +5,7 @@ let a = new Contact();
 export const CONTACTS: Contact[] = [
     new Contact({
         nome: "Fernando",
-        data_de_nascimento: new Date(1992, 8, 4),
+        data_de_nascimento: new Date(1992, 7, 4),
         empresa: "Caesb",
         empresa_fonetico: "Caesb",
         enderecos: [
