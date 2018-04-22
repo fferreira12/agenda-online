@@ -6,10 +6,15 @@ import { CONTACTS } from './mock-contacts';
 import { Subject } from 'rxjs/Subject';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 // import * as Rx from 'rxjs';
 
 @Injectable()
 export class ContactMockup {
+
+    //web config
+    private url: string = 'AgendaOnline/AdicionaContato';
 
     //array of contacts
     private contacts: Contact[];
@@ -29,7 +34,7 @@ export class ContactMockup {
     //subject of the query string
     private queryString = new Subject<String>();
 
-    constructor() {
+    constructor(private http: HttpClient) {
         this.init();
     }
 
@@ -64,12 +69,27 @@ export class ContactMockup {
     //verifies if new contact or editing
     addContact(contact: Contact) {
 
+        //LOCAL VERSION (MOCKUP)
+        /*
         if(this.contactOnEdit != null) {
             this.contacts.splice(this.contacts.indexOf(this.contactOnEdit),1,contact);
             this.contactOnEdit = null;
         } else {
             this.contacts.push(contact);
         }
+        */
+
+        //SERVLET VERSION
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        this.http.post<Contact>(this.url, contact, httpOptions)
+            .subscribe((v) => {
+                console.log(v);
+            });
 
         this.behaviorSubject.next(this.contacts);
     }

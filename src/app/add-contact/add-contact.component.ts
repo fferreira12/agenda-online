@@ -119,7 +119,7 @@ export class AddContactComponent implements OnInit {
 
   onSave() {
     const saveContact = this.prepareSaveContact();
-    console.log(saveContact);
+    //console.log(saveContact);
     this.cs.addContact(saveContact);
     this.onClickAddContact();
     this.contactForm.reset();
