@@ -13,7 +13,7 @@ import { Observable } from 'rxjs/Observable';
 export class ContactListComponent implements OnInit {
 
 
-  constructor(private contactService: ContactMockup) {
+  constructor(public contactService: ContactMockup) {
   }
   
   ngOnInit() {

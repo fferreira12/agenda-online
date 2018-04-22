@@ -10,7 +10,7 @@ import { ContactMockup } from '../contact.mockup.service';
 })
 export class AddContactComponent implements OnInit {
 
-  private onAddMode: boolean = false;
+  public onAddMode: boolean = false;
   private contactForm: FormGroup;
 
   constructor(
