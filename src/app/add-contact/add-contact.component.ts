@@ -12,6 +12,7 @@ export class AddContactComponent implements OnInit {
 
   public onAddMode: boolean = false;
   private contactForm: FormGroup;
+  private editingContact: Contact;
 
   constructor(
     private fb: FormBuilder,
@@ -25,6 +26,17 @@ export class AddContactComponent implements OnInit {
     this.addItem('url');
     this.addItem('endereco');
     this.addItem('rede_social');
+
+    this.cs.getEditingContact$().subscribe({
+      next: (contact) => { 
+        if(contact != null) {
+          this.editingContact = contact;
+          this.setContact(this.editingContact);
+          this.onAddMode = true;
+        }
+      }
+    })
+
   }
 
   createForm() {
@@ -41,6 +53,13 @@ export class AddContactComponent implements OnInit {
       enderecos: this.fb.array([]),
       redes_sociais: this.fb.array([])
     });
+  }
+
+  //TODO: test
+  setContact(contact: Contact) {
+    if(contact != null) {
+      this.contactForm.patchValue(contact);
+    }
   }
 
   setTelefones(telefones: { tipo: String, numero: String }[]) {
@@ -103,6 +122,7 @@ export class AddContactComponent implements OnInit {
     console.log(saveContact);
     this.cs.addContact(saveContact);
     this.onClickAddContact();
+    this.contactForm.reset();
   }
 
   prepareSaveContact(): Contact {

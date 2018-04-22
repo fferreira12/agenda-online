@@ -14,6 +14,10 @@ export class ContactMockup {
     //array of contacts
     private contacts: Contact[];
 
+    //contact being edited
+    private contactOnEdit: Contact;
+    private editingContact: BehaviorSubject<Contact>;
+
     //subject of contacts, con multicast to many observers
     //is an observable and an observer at the same time
     //private subject: Subject<Contact[]>;
@@ -35,7 +39,7 @@ export class ContactMockup {
 
         this.behaviorSubject = new BehaviorSubject(this.contacts);
 
-
+        this.editingContact = new BehaviorSubject<Contact>(null);
     }
 
     //called on every keystroke
@@ -57,8 +61,16 @@ export class ContactMockup {
     }
 
     //adds new contact to the contact property
+    //verifies if new contact or editing
     addContact(contact: Contact) {
-        this.contacts.push(contact);
+
+        if(this.contactOnEdit != null) {
+            this.contacts.splice(this.contacts.indexOf(this.contactOnEdit),1,contact);
+            this.contactOnEdit = null;
+        } else {
+            this.contacts.push(contact);
+        }
+
         this.behaviorSubject.next(this.contacts);
     }
 
@@ -76,6 +88,16 @@ export class ContactMockup {
             return true;
         }
         return false;
+    }
+
+    editContact(contact: Contact) {
+        this.contactOnEdit = contact;
+        this.editingContact.next(contact);
+        // this.contactOnEdit = null;
+    }
+
+    getEditingContact$() {
+        return this.editingContact;
     }
 
 }

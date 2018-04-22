@@ -20,4 +20,8 @@ export class ContactDetailComponent implements OnInit {
     this.cs.deleteContact(this.contact);
   }
 
+  onEditContact() {
+    this.cs.editContact(this.contact);
+  }
+
 }
