@@ -8,6 +8,7 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
+import { ContactService } from './contact.service';
 // import * as Rx from 'rxjs';
 
 @Injectable()
@@ -34,17 +35,21 @@ export class ContactMockup {
     //subject of the query string
     private queryString = new Subject<String>();
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, private cs: ContactService) {
         this.init();
     }
 
     init() {
         //gets mockup data
-        this.contacts = CONTACTS;
+        //this.contacts = CONTACTS;
+        this.behaviorSubject = new BehaviorSubject(null);
+        this.cs.getContacts().subscribe((value) => {
+            this.contacts = value;
+            //this.behaviorSubject = new BehaviorSubject(this.contacts);
+            this.behaviorSubject.next(this.contacts);
+            this.editingContact = new BehaviorSubject<Contact>(null);
+        });
 
-        this.behaviorSubject = new BehaviorSubject(this.contacts);
-
-        this.editingContact = new BehaviorSubject<Contact>(null);
     }
 
     //called on every keystroke
@@ -55,14 +60,18 @@ export class ContactMockup {
     searchContacts(term: String): BehaviorSubject<Contact[]> {
 
         let matches: Contact[] = [];
-        for (let contact of this.contacts) {
-            if (contact.search(term)) {
-                matches.push(contact);
+        if (this.contacts != null) {
+            for (let contact of this.contacts) {
+                if (contact.search(term)) {
+                    matches.push(contact);
+                }
             }
-        }
-        this.behaviorSubject.next(matches);
 
-        return this.behaviorSubject;
+            this.behaviorSubject.next(matches);
+            return this.behaviorSubject;
+        }
+
+
     }
 
     //adds new contact to the contact property
@@ -80,18 +89,12 @@ export class ContactMockup {
         */
 
         //SERVLET VERSION
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json'
-            })
-        };
+        this.cs.addContact(contact).subscribe((v) => {
+            console.log(v);
+            this.behaviorSubject.next(this.contacts);
+            this.init();
+        });
 
-        this.http.post<Contact>(this.url, contact, httpOptions)
-            .subscribe((v) => {
-                console.log(v);
-            });
-
-        this.behaviorSubject.next(this.contacts);
     }
 
     //returns the observable of contacts

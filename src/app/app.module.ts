@@ -11,6 +11,7 @@ import { ContactListComponent } from './contact-list/contact-list.component';
 import { ContactMockup } from './contact.mockup.service';
 import { AddContactComponent } from './add-contact/add-contact.component';
 import { ContactDetailComponent } from './contact-detail/contact-detail.component';
+import { ContactService } from './contact.service';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { ContactDetailComponent } from './contact-detail/contact-detail.componen
     HttpClientModule
   ],
   providers: [
-    ContactMockup
+    ContactMockup,
+    ContactService
   ],
   bootstrap: [AppComponent]
 })
