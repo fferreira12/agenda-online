@@ -7,6 +7,7 @@ export class ContactService {
 
     private getContactsUrl: string = 'http://localhost:8080/AgendaOnline/GetContatos';
     private addContactsUrl: string = 'http://localhost:8080/AgendaOnline/AdicionaContato';
+    private deleteContactsUrl: string = 'http://localhost:8080/AgendaOnline/DeletaContato';
     private httpOptions = {
         headers: new HttpHeaders({
             'Content-Type': 'application/json'
@@ -26,7 +27,9 @@ export class ContactService {
         return this.http.post(this.addContactsUrl, contact, this.httpOptions);
     }
 
-
+    deleteContact(contact: Contact) {
+        return this.http.post(this.deleteContactsUrl, contact, this.httpOptions);
+    }
 
 
 

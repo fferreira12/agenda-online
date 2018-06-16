@@ -103,14 +103,21 @@ export class ContactMockup {
         return this.behaviorSubject;
     }
 
-    deleteContact(contact: Contact): boolean {
-        let index = this.contacts.indexOf(contact);
+    deleteContact(contact: Contact) {
+        /*let index = this.contacts.indexOf(contact);
         if (index > -1) {
             this.contacts.splice(index, 1);
             this.behaviorSubject.next(this.contacts);
             return true;
         }
-        return false;
+        return false;*/
+
+        //servlet version
+        this.cs.deleteContact(contact).subscribe((v) => {
+            console.log(v);
+            this.behaviorSubject.next(this.contacts);
+            this.init();
+        });
     }
 
     editContact(contact: Contact) {

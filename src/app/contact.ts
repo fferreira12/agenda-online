@@ -1,4 +1,5 @@
 export class Contact {
+    id: number;
     nome: String;
     nome_fonetico: String;
     sobrenome: String;
