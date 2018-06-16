@@ -3,10 +3,10 @@
   <div class="col1">
     <h2>{{contact.nome}} {{contact.sobrenome}} <span *ngIf="showDetails">({{contact.nome_fonetico}} {{contact.sobrenome_fonetico}})</span></h2>
     <div class="details" *ngIf="!showDetails">
-      <p>Telefone: {{contact.telefones[0].numero}}</p>
-      <p>Email: {{contact.emails[0].email}}</p>
-      <p>Empresa: {{contact.empresa}}</p>
-      <p>Endereço: {{contact.enderecos[0].endereco}}</p>
+      <p *ngIf="contact.telefones">Telefone: {{contact.telefones[0].numero}}</p>
+      <p *ngIf="contact.emails">Email: {{contact.emails[0].email}}</p>
+      <p *ngIf="contact.empresa">Empresa: {{contact.empresa}}</p>
+      <p *ngIf="contact.enderecos">Endereço: {{contact.enderecos[0].endereco}}</p>
     </div>
   </div>
 </li>

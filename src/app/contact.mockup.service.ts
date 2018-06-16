@@ -6,10 +6,16 @@ import { CONTACTS } from './mock-contacts';
 import { Subject } from 'rxjs/Subject';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
+import { ContactService } from './contact.service';
 // import * as Rx from 'rxjs';
 
 @Injectable()
 export class ContactMockup {
+
+    //web config
+    private url: string = 'AgendaOnline/AdicionaContato';
 
     //array of contacts
     private contacts: Contact[];
@@ -29,18 +35,27 @@ export class ContactMockup {
     //subject of the query string
     private queryString = new Subject<String>();
 
-    constructor() {
+    constructor(private http: HttpClient, private cs: ContactService) {
         this.init();
     }
 
     init() {
         //gets mockup data
-        this.contacts = CONTACTS;
-
-        this.behaviorSubject = new BehaviorSubject(this.contacts);
-
+        //this.contacts = CONTACTS;
+        this.behaviorSubject = new BehaviorSubject(null);
         this.editingContact = new BehaviorSubject<Contact>(null);
+        this.refreshContacts()
+
     }
+
+    refreshContacts() {
+        this.cs.getContacts().subscribe((value) => {
+            this.contacts = value;
+            //this.behaviorSubject = new BehaviorSubject(this.contacts);
+            this.behaviorSubject.next(this.contacts);
+        });
+    }
+
 
     //called on every keystroke
     search(term: String): void {
@@ -50,28 +65,41 @@ export class ContactMockup {
     searchContacts(term: String): BehaviorSubject<Contact[]> {
 
         let matches: Contact[] = [];
-        for (let contact of this.contacts) {
-            if (contact.search(term)) {
-                matches.push(contact);
+        if (this.contacts != null) {
+            for (let contact of this.contacts) {
+                if (contact.search(term)) {
+                    matches.push(contact);
+                }
             }
-        }
-        this.behaviorSubject.next(matches);
 
-        return this.behaviorSubject;
+            this.behaviorSubject.next(matches);
+            return this.behaviorSubject;
+        }
+
+
     }
 
     //adds new contact to the contact property
     //verifies if new contact or editing
     addContact(contact: Contact) {
 
+        //LOCAL VERSION (MOCKUP)
+        /*
         if(this.contactOnEdit != null) {
             this.contacts.splice(this.contacts.indexOf(this.contactOnEdit),1,contact);
             this.contactOnEdit = null;
         } else {
             this.contacts.push(contact);
         }
+        */
 
-        this.behaviorSubject.next(this.contacts);
+        //SERVLET VERSION
+        this.cs.addContact(contact).subscribe((v) => {
+            console.log(v);
+            this.behaviorSubject.next(this.contacts);
+            this.refreshContacts();
+        });
+
     }
 
     //returns the observable of contacts
@@ -80,20 +108,36 @@ export class ContactMockup {
         return this.behaviorSubject;
     }
 
-    deleteContact(contact: Contact): boolean {
-        let index = this.contacts.indexOf(contact);
+    deleteContact(contact: Contact) {
+        /*let index = this.contacts.indexOf(contact);
         if (index > -1) {
             this.contacts.splice(index, 1);
             this.behaviorSubject.next(this.contacts);
             return true;
         }
-        return false;
+        return false;*/
+
+        //servlet version
+        this.cs.deleteContact(contact).subscribe((v) => {
+            console.log(v);
+            this.behaviorSubject.next(this.contacts);
+            this.refreshContacts();
+        });
     }
 
     editContact(contact: Contact) {
         this.contactOnEdit = contact;
         this.editingContact.next(contact);
-        // this.contactOnEdit = null;
+
+        console.log('finished edit contact inside service');
+    }
+
+    saveEditingContact(contact: Contact) {
+        this.cs.editContact(contact).subscribe((v) => {
+            console.log(v);
+            this.behaviorSubject.next(this.contacts);
+            this.refreshContacts();
+        });
     }
 
     getEditingContact$() {

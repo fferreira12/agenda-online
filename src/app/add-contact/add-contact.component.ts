@@ -28,10 +28,10 @@ export class AddContactComponent implements OnInit {
     this.addItem('rede_social');
 
     this.cs.getEditingContact$().subscribe({
-      next: (contact) => { 
-        if(contact != null) {
-          this.editingContact = contact;
-          this.setContact(this.editingContact);
+      next: (contact) => {
+        this.editingContact = contact;
+        if (contact != null) {
+          this.setContact(contact);
           this.onAddMode = true;
         }
       }
@@ -57,7 +57,7 @@ export class AddContactComponent implements OnInit {
 
   //TODO: test
   setContact(contact: Contact) {
-    if(contact != null) {
+    if (contact != null) {
       this.contactForm.patchValue(contact);
     }
   }
@@ -119,15 +119,32 @@ export class AddContactComponent implements OnInit {
 
   onSave() {
     const saveContact = this.prepareSaveContact();
-    console.log(saveContact);
-    this.cs.addContact(saveContact);
+    //console.log(saveContact);
+
+    if (this.editingContact == null) {
+      this.cs.addContact(saveContact);
+    } else {
+      this.cs.saveEditingContact(saveContact);
+    }
+
     this.onClickAddContact();
     this.contactForm.reset();
+    this.editingContact = null;
   }
 
   prepareSaveContact(): Contact {
+
     const formModel = this.contactForm.value;
-    return new Contact(formModel);
+    let c = new Contact(formModel);
+
+    if (this.editingContact != null) {
+      c.id = this.editingContact.id;
+    } else {
+      c.id = -1;
+    }
+
+    return c;
+
   }
 
 }
