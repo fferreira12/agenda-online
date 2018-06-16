@@ -43,14 +43,19 @@ export class ContactMockup {
         //gets mockup data
         //this.contacts = CONTACTS;
         this.behaviorSubject = new BehaviorSubject(null);
+        this.editingContact = new BehaviorSubject<Contact>(null);
+        this.refreshContacts()
+
+    }
+
+    refreshContacts() {
         this.cs.getContacts().subscribe((value) => {
             this.contacts = value;
             //this.behaviorSubject = new BehaviorSubject(this.contacts);
             this.behaviorSubject.next(this.contacts);
-            this.editingContact = new BehaviorSubject<Contact>(null);
         });
-
     }
+
 
     //called on every keystroke
     search(term: String): void {
@@ -92,7 +97,7 @@ export class ContactMockup {
         this.cs.addContact(contact).subscribe((v) => {
             console.log(v);
             this.behaviorSubject.next(this.contacts);
-            this.init();
+            this.refreshContacts();
         });
 
     }
@@ -116,14 +121,23 @@ export class ContactMockup {
         this.cs.deleteContact(contact).subscribe((v) => {
             console.log(v);
             this.behaviorSubject.next(this.contacts);
-            this.init();
+            this.refreshContacts();
         });
     }
 
     editContact(contact: Contact) {
         this.contactOnEdit = contact;
         this.editingContact.next(contact);
-        // this.contactOnEdit = null;
+
+        console.log('finished edit contact inside service');
+    }
+
+    saveEditingContact(contact: Contact) {
+        this.cs.editContact(contact).subscribe((v) => {
+            console.log(v);
+            this.behaviorSubject.next(this.contacts);
+            this.refreshContacts();
+        });
     }
 
     getEditingContact$() {
