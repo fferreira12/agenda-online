@@ -17,26 +17,30 @@ export class Contact {
         Object.assign(this, init);
     }
 
-    public search(query: String, obj: any = this): boolean {
+    search(query: string): boolean {
 
-        for (var key in obj) {
-            var value = obj[key];
+        // for (var key in obj) {
+        //     var value = obj[key];
 
-            if (value instanceof Date) {
-                value = value.toString();
-            }
+        //     if (value instanceof Date) {
+        //         value = value.toString();
+        //     }
 
-            if (typeof value === 'object' || value instanceof Array) {
-                return this.search(query, value);
-            }
+        //     if (typeof value === 'object' || value instanceof Array) {
+        //         return this.search(query, value);
+        //     }
 
-            if (value && value.toString && value.toString().toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-                return true;
-            }
+        //     if (value && value.toString && value.toString().toLowerCase().indexOf(query.toLowerCase()) >= 0) {
+        //         return true;
+        //     }
 
-        }
+        // }
 
-        return false;
+        // return false;
+
+        let contactString = JSON.stringify(this);
+
+        return contactString.includes(query);
 
     }
 }

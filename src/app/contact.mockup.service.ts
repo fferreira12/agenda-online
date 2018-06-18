@@ -49,11 +49,16 @@ export class ContactMockup {
     }
 
     refreshContacts() {
-        this.cs.getContacts().subscribe((value) => {
-            this.contacts = value;
-            //this.behaviorSubject = new BehaviorSubject(this.contacts);
-            this.behaviorSubject.next(this.contacts);
-        });
+        this.cs.getContacts()
+            .subscribe((value) => {
+                let conts = value.map((contact) => {
+                    return new Contact(contact);
+                });
+                
+                this.contacts = conts;
+                //this.behaviorSubject = new BehaviorSubject(this.contacts);
+                this.behaviorSubject.next(this.contacts);
+            });
     }
 
 
@@ -62,16 +67,22 @@ export class ContactMockup {
         this.queryString.next(term);
     }
 
-    searchContacts(term: String): BehaviorSubject<Contact[]> {
+    searchContacts(term: string): BehaviorSubject<Contact[]> {
 
-        let matches: Contact[] = [];
+        // let matches: Contact[] = [];
+        // if (this.contacts != null) {
+        //     for (let contact of this.contacts) {
+        //         if (contact.search(term)) {
+        //             matches.push(contact);
+        //         }
+        //     }
+
+        //     this.behaviorSubject.next(matches);
+        //     return this.behaviorSubject;
+        // }
+
         if (this.contacts != null) {
-            for (let contact of this.contacts) {
-                if (contact.search(term)) {
-                    matches.push(contact);
-                }
-            }
-
+            let matches = this.contacts.filter((contact) => contact.search(term));
             this.behaviorSubject.next(matches);
             return this.behaviorSubject;
         }
